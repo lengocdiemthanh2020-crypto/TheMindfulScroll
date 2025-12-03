@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Mindful Scroll – Hành vi & Pháp luật trên MXH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* Reset nhẹ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(180deg, #ecfdf3 0%, #f9fafb 40%, #ffffff 100%);
+      color: #1f2933;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Thanh điều hướng */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #15803d;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mascot {
+      width: 100px;        /* 👉 chỉnh kích thước logo ở đây */
+      height: auto;
+      display: block;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav li a {
+      font-size: 0.9rem;
+      padding: 7px 12px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s, transform 0.1s, box-shadow 0.1s;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    nav li a:hover {
+      background: #dcfce7;
+      color: #166534;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
+      transform: translateY(-1px);
+    }
+
+    nav li a.nav-active {
+      background: #16a34a;
+      color: #f9fafb;
+      box-shadow: 0 6px 14px rgba(22, 163, 74, 0.45);
+    }
+
+    /* View chung */
+    .view {
+      max-width: 1100px;
+      margin: 16px auto 40px;
+      padding: 0 20px;
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero / Thông tin dự án */
+    .hero {
+      margin-top: 20px;
+      padding: 26px 20px 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 26px;
+      align-items: center;
+      border-radius: 26px;
+      background: radial-gradient(circle at 0 0, #bbf7d0 0, #ecfdf3 42%, #ffffff 100%);
+      border: 1px solid #bbf7d0;
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.18);
+    }
+
+    .hero-text h1 {
+      font-size: 1.9rem;
+      color: #064e3b;
+      margin-bottom: 10px;
+    }
+
+    .hero-text h2 {
+      font-size: 1.05rem;
+      color: #166534;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .hero-text p {
+      font-size: 0.98rem;
+      margin-bottom: 12px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 10px;
+    }
+
+    .hero-highlight {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 7px 12px;
+      border-left: 3px solid #22c55e;
+      background: #f0fdf4;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #065f46;
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.14);
+      border: 1px solid #e5e7eb;
+    }
+
+    .hero-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #064e3b;
+    }
+
+    .hero-card ul {
+      list-style: none;
+      font-size: 0.9rem;
+    }
+
+    .hero-card li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .hero-card li span.icon {
+      font-size: 0.95rem;
+      margin-top: 2px;
+    }
+
+    .hero-buttons {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4);
+    }
+
+    .btn-ghost {
+      background: #f9fafb;
+      color: #111827;
+      border: 1px solid #d1fae5;
+    }
+
+    /* Các section nội dung */
+    section.box {
+      margin-top: 20px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px 18px 22px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      border: 1px solid #d1fae5;
+    }
+
+    section.box h2 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: #064e3b;
+    }
+
+    section.box p {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+      margin-bottom: 3px;
+    }
+
+    .timeline {
+      margin-top: 8px;
+      border-left: 2px dashed #bbf7d0;
+      padding-left: 14px;
+    }
+
+    .timeline-item {
+      margin-bottom: 12px;
+    }
+
+    .timeline-item h3 {
+      font-size: 0.95rem;
+      color: #166534;
+      margin-bottom: 3px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #047857;
+    }
+
+    .law-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f0fdf4;
+      border-left: 3px solid #16a34a;
+      font-size: 0.9rem;
+    }
+
+    .law-box h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: #065f46;
+    }
+
+    .law-box ul {
+      margin-left: 16px;
+      margin-top: 4px;
+    }
+
+    .law-box li {
+      margin-bottom: 4px;
+    }
+
+    .law-note {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #166534;
+    }
+
+    .journal-widget {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .journal-widget textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #d1fae5;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .journal-actions {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .journal-status {
+      font-size: 0.86rem;
+    }
+
+    .journal-streak {
+      margin-top: 10px;
+      font-size: 0.86rem;
+      color: #065f46;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 14px 10px 24px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 22px;
+      }
+
+      .hero-card {
+        order: -1;
+      }
+
+      nav ul {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Thanh điều hướng -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <!-- Đặt file ảnh cùng thư mục và sửa tên src cho đúng -->
+        <img src="mindy-mascot.png" alt="Mindy Scrolla mascot" class="brand-mascot"/>
+        <span>The Mindful Scroll</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#" data-nav="intro" class="nav-active">Thông tin dự án</a></li>
+          <li><a href="#" data-nav="journal">Nhật kí cải thiện hành vi</a></li>
+          <li><a href="#" data-nav="awareness">Nhận thức</a></li>
+          <li><a href="#" data-nav="share">Tâm sự thân mật</a></li>
+          <li><a href="#" data-nav="game">Mini-game</a></li>
+          <li>
+            <a href="https://www.facebook.com/share/17hDYMVm3P/?mibextid=wwXIfr"
+               target="_blank" rel="noopener">
+              Fanpage The Mindful Scroll
+            </a>
+          </li>
+          <li>
+            <a href="https://chatgpt.com/g/g-68f8e1c911048191bf1a67ac9485b0d4-mindy-scrolla"
+               target="_blank" rel="noopener">
+              Chatbot Mindy Scrolla
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- VIEW 1: Thông tin dự án -->
+  <div id="view-intro" class="view active">
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge">
+          🌱 Dự án học sinh THPT · Phi lợi nhuận
+        </div>
+        <h1>The Mindful Scroll – Lướt mạng tỉnh thức, hành xử có trách nhiệm</h1>
+        <h2>Nền tảng web & chatbot hỗ trợ nhận thức đạo đức – pháp luật về hành vi lệch chuẩn trên mạng xã hội</h2>
+
+        <p>
+          Dự án được xây dựng bởi học sinh THPT với mong muốn tạo ra một
+          không gian an toàn, nơi bạn có thể nhìn lại thói quen sử dụng mạng xã hội,
+          hiểu rõ hậu quả pháp lý – đạo đức và học cách “lướt mạng tỉnh thức”.
+        </p>
+        <p class="hero-highlight">
+          Từ trang web, fanpage đến chatbot Mindy Scrolla – tất cả được thiết kế
+          để đồng hành cùng bạn trên hành trình trở thành công dân số có trách nhiệm.
+        </p>
+      </div>
+
+      <aside class="hero-card">
+        <h3>Bạn có thể làm gì với The Mindful Scroll?</h3>
+        <ul>
+          <li>
+            <span class="icon">🧭</span>
+            <span>Ghi lại <strong>nhật kí cải thiện hành vi</strong> khi tham gia thử thách thay đổi bản thân.</span>
+          </li>
+          <li>
+            <span class="icon">💡</span>
+            <span>Làm rõ <strong>nhận thức</strong> về hành vi lệch chuẩn và trách nhiệm pháp luật trên mạng xã hội.</span>
+          </li>
+          <li>
+            <span class="icon">📘</span>
+            <span>Theo dõi bài viết, infographic, minigame giáo dục trên <strong>Fanpage The Mindful Scroll</strong>.</span>
+          </li>
+          <li>
+            <span class="icon">🤖</span>
+            <span>Trò chuyện cùng <strong>Chatbot Mindy Scrolla</strong> để được lắng nghe và gợi ý hướng xử lí tình huống.</span>
+          </li>
+          <li>
+            <span class="icon">📝 </span>
+            <span>Trò chuyện cùng <strong>Scrolla Stories</strong> để được tâm sự và đồng hành cùng những chuyện bạn chưa kể.</span>
+          </li>
+        </ul>
+
+        <div class="hero-buttons">
+          <button class="btn btn-primary" data-nav="journal">
+            Bắt đầu với nhật kí hành vi 🌿
+          </button>
+          <button class="btn btn-ghost" data-nav="awareness">
+            Khám phá phần Nhận thức
+          </button>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <!-- VIEW 2: Nhật kí + Nhận thức + Tâm sự -->
+  <div id="view-main" class="view">
+    <!-- Nhật kí cải thiện hành vi -->
+    <section id="nhat-ki" class="box">
+      <div class="section-subtitle">Journal · Reflection</div>
+      <h2>Nhật kí cải thiện hành vi trên mạng xã hội</h2>
+      <p>
+        Đây là không gian để bạn ghi lại hành trình thay đổi: từ những thói quen
+        chưa tốt đến những bước tiến nhỏ nhưng bền vững. Bạn có thể dùng cấu trúc
+        gợi ý sau để suy nghĩ mỗi ngày:
+      </p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>1. Hôm nay mình đã làm gì trên mạng xã hội?</h3>
+          <p>Ví dụ: đăng bài, bình luận, chia sẻ, tham gia tranh luận, nhắn tin trong nhóm…</p>
+        </div>
+        <div class="timeline-item">
+          <h3>2. Hành vi đó có thể gây hại cho ai không?</h3>
+          <p>Nếu người khác đọc được, họ sẽ cảm thấy thế nào? Có vi phạm nội quy, pháp luật không?</p>
+        </div>
+        <div class="timeline-item">
+          <h3>3. Mình rút ra được điều gì?</h3>
+          <p>Mình nên giữ lại hành vi nào, điều chỉnh hành vi nào, cần xin lỗi / giải thích với ai?</p>
+        </div>
+        <div class="timeline-item">
+          <h3>4. Cam kết nhỏ cho ngày mai</h3>
+          <p>Một hành động cụ thể, thực tế, dễ làm để cải thiện hành vi (ví dụ: không share tin chưa kiểm chứng).</p>
+        </div>
+      </div>
+
+      <!-- Widget nhật kí -->
+      <div class="journal-widget">
+        <p style="font-size:0.9rem; margin-bottom:8px;">
+          ✍️ <strong>Nhật kí cá nhân của bạn</strong> – nội dung được lưu trên thiết bị của bạn bằng trình duyệt,
+          không ai khác nhìn thấy. Hãy thành thật với chính mình nhé.
+        </p>
+        <textarea id="journal-text"
+          placeholder="Hôm nay mình đã làm gì trên mạng xã hội? Mình cảm thấy thế nào về những điều đó? Mình muốn thay đổi điều gì cho ngày mai?..."></textarea>
+
+        <div class="journal-actions">
+          <button id="save-journal-btn"
+            style="padding:8px 14px; border-radius:999px; border:none; cursor:pointer;
+                   background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; font-size:0.9rem;">
+            Lưu nhật kí hôm nay 🌿
+          </button>
+          <span id="journal-status" class="journal-status"></span>
+        </div>
+
+        <div class="journal-streak">
+          🔥 Chuỗi ngày bạn đã viết nhật kí liên tục: <strong id="journal-streak">0</strong> ngày
+        </div>
+
+        <details style="margin-top:10px; font-size:0.86rem;">
+          <summary style="cursor:pointer; color:#166534;">Xem các ngày gần đây</summary>
+          <ul id="journal-list" style="margin-top:6px; list-style:none; padding-left:0;"></ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Nhận thức -->
+    <section id="nhan-thuc" class="box">
+      <div class="section-subtitle">Awareness · Learning</div>
+      <h2>Nhận thức về hành vi lệch chuẩn & trách nhiệm pháp luật</h2>
+      <p>
+        Phần này dựa trên đề tài NCKH:
+        <strong>“ỨNG DỤNG LÝ THUYẾT UGT VÀ MDT PHÂN TÍCH HÀNH VI LỆCH CHUẨN TRÊN MẠNG XÃ HỘI
+        CỦA HỌC SINH THPT TẠI THÀNH PHỐ HỒ CHÍ MINH”</strong>.
+      </p>
+      <p>
+        Mục tiêu là giúp bạn hiểu:
+        (1) vì sao mình sử dụng mạng xã hội (theo UGT),
+        (2) vì sao đôi khi mình “tự bào chữa” cho hành vi lệch chuẩn (theo MDT),
+        và (3) hành vi đó liên quan thế nào tới chuẩn mực đạo đức – pháp luật.
+      </p>
+      <p>
+        Bạn có thể triển khai các nội dung như:
+      </p>
+      <ul style="margin-left:18px; font-size:0.95rem;">
+        <li>⭐ <strong>Khái niệm cơ bản:</strong> hành vi lệch chuẩn trên mạng xã hội là gì?</li>
+        <li>🧠 <strong>Góc nhìn tâm lí (UGT & MDT):</strong> động cơ sử dụng mạng xã hội, cơ chế biện minh cho hành vi.</li>
+        <li>🌱 <strong>Gợi ý thay đổi:</strong> bộ câu hỏi tự phản tỉnh, checklist “trước khi đăng / bình luận”.</li>
+      </ul>
+
+      <div class="law-box">
+        <h3>📜 Một số quy định pháp luật liên quan</h3>
+        <p>
+          Không gian mạng cũng chịu sự điều chỉnh của pháp luật. Một số văn bản quan trọng mà học sinh THPT cần biết:
+        </p>
+        <ul>
+          <li>
+            <strong>Luật An ninh mạng 2018</strong> – quy định các hành vi bị nghiêm cấm trên không gian mạng, bảo vệ an ninh,
+            trật tự an toàn xã hội và quyền lợi của tổ chức, cá nhân.
+          </li>
+          <li>
+            <strong>Bộ luật Hình sự 2015, sửa đổi 2017 – Điều 155</strong>:
+            tội <em>làm nhục người khác</em> (xúc phạm nghiêm trọng danh dự, nhân phẩm, kể cả thông qua mạng xã hội).
+          </li>
+          <li>
+            <strong>Bộ luật Hình sự 2015 – Điều 156</strong>:
+            tội <em>vu khống</em> (bịa đặt, lan truyền thông tin sai sự thật làm ảnh hưởng đến uy tín, danh dự người khác).
+          </li>
+          <li>
+            <strong>Nghị định 15/2020/NĐ-CP</strong>:
+            phạt tiền đối với hành vi đăng tải, chia sẻ thông tin sai sự thật, xúc phạm danh dự, nhân phẩm, xâm phạm đời tư.
+          </li>
+        </ul>
+        <p class="law-note">
+          👉 Trước khi đăng, bình luận hoặc chia sẻ, hãy tự hỏi:
+          “Thông tin này đã được kiểm chứng chưa? Có thể làm tổn thương hoặc xâm phạm quyền của ai không?
+          Nếu nghi ngờ – đừng đăng.”
+        </p>
+      </div>
+
+      <div class="tag-list">
+        <span class="tag">Hành vi lệch chuẩn</span>
+        <span class="tag">Pháp luật & đạo đức</span>
+        <span class="tag">UGT & MDT</span>
+        <span class="tag">Học sinh THPT</span>
+      </div>
+    </section>
+
+    <!-- Tâm sự thân mật -->
+    <section id="tam-su" class="box">
+      <div class="section-subtitle">Sharing · Care</div>
+      <h2>Tâm sự thân mật cùng The Mindful Scroll</h2>
+      <p style="font-size:0.92rem;">
+        Đây là không gian để bạn chia sẻ những điều đang trăn trở về việc sử dụng mạng xã hội,
+        mối quan hệ, áp lực học tập,... Nội dung sẽ được gửi riêng đến nhóm thực hiện dự án,
+        không công khai. Nếu bạn để lại thông tin liên hệ, chúng mình sẽ cố gắng phản hồi sớm nhất có thể.
+      </p>
+
+      <!-- Thay src bằng link embed Google Form -->
+      <iframe
+        src="https://forms.gle/tL7ZPG3RQ8TuWd2DA"
+        width="100%" height="520"
+        frameborder="0" marginheight="0" marginwidth="0"
+        style="border-radius:16px; border:1px solid #d1fae5; background:#ffffff;">
+        Đang tải biểu mẫu…
+      </iframe>
+    </section>
+    <!-- Mini-game nhận thức hành vi lệch chuẩn -->
+    <section id="mini-game" class="box">
+      <div class="section-subtitle">Play · Learn</div>
+      <h2>Mini-game: Nhận thức hành vi lệch chuẩn trên mạng xã hội</h2>
+      <p style="font-size:0.95rem;">
+        Đây là mini-game giúp bạn kiểm tra nhanh mức độ nhận thức về hành vi lệch chuẩn trên mạng xã hội,
+        qua các câu hỏi tình huống gần gũi với học sinh THPT. Hãy chơi thử và xem mình đang ở “level” nào nhé! 🌿
+      </p>
+
+      <iframe
+        src="https://quizgamenhanthuchanhvilechchuantrenmxh.oneapp.dev"
+        width="100%" height="560"
+        frameborder="0" marginheight="0" marginwidth="0"
+        style="border-radius:16px; border:1px solid #d1fae5; background:#ffffff;">
+        Đang tải mini-game…
+      </iframe>
+    </section>
+  </div>
+  <footer>
+    © 2025 · Dự án The Mindful Scroll – Xây dựng văn hóa sử dụng mạng xã hội an toàn, có trách nhiệm.
+  </footer>
+
+  <!-- SCRIPT 1: Chuyển view -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var viewIntro = document.getElementById("view-intro");
+      var viewMain  = document.getElementById("view-main");
+
+      function showIntro() {
+        viewIntro.className = "view active";
+        viewMain.className  = "view";
+        window.scrollTo(0, 0);
+      }
+
+      function showMain(anchorId) {
+        viewIntro.className = "view";
+        viewMain.className  = "view active";
+
+        if (anchorId) {
+          var el = document.getElementById(anchorId);
+          if (el) {
+            var top = el.offsetTop - 70;
+            window.scrollTo(0, top);
+          }
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      function setActiveNav(name) {
+        var links = document.querySelectorAll("a[data-nav]");
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].getAttribute("data-nav") === name) {
+            links[i].classList.add("nav-active");
+          } else {
+            links[i].classList.remove("nav-active");
+          }
+        }
+      }
+
+      function handleNav(name) {
+        if (name === "intro") {
+          showIntro();
+        } else if (name === "journal") {
+          showMain("nhat-ki");
+        } else if (name === "awareness") {
+          showMain("nhan-thuc");
+        } else if (name === "share") {
+          showMain("tam-su");   // ✅ thêm dòng này để kích hoạt phần tâm sự
+        } else if (name === "game") {
+          showMain("mini-game");
+        }
+        setActiveNav(name);
+      }
+
+      var clickables = document.querySelectorAll("[data-nav]");
+      for (var i = 0; i < clickables.length; i++) {
+        clickables[i].addEventListener("click", function (e) {
+          e.preventDefault();
+          var name = this.getAttribute("data-nav");
+          if (name) handleNav(name);
+        });
+      }
+    });
+  </script>
+
+  <!-- SCRIPT 2: Nhật kí (localStorage) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        var JOURNAL_KEY = "tms_journal_entries";
+
+        function getTodayStr() {
+          var d = new Date();
+          var y = d.getFullYear();
+          var m = String(d.getMonth() + 1).padStart(2, "0");
+          var day = String(d.getDate()).padStart(2, "0");
+          return y + "-" + m + "-" + day;
+        }
+
+        function loadEntries() {
+          var raw;
+          try {
+            raw = localStorage.getItem(JOURNAL_KEY);
+          } catch (e) {
+            return [];
+          }
+          if (!raw) return [];
+          try {
+            return JSON.parse(raw);
+          } catch (e) {
+            return [];
+          }
+        }
+        
+        function saveEntries(entries) {
+          try {
+            localStorage.setItem(JOURNAL_KEY, JSON.stringify(entries));
+          } catch (e) {
+            // nếu lỗi (ví dụ chế độ private), bỏ qua
+          }
+        }
+
+        function calcStreak(entries) {
+          if (!entries || entries.length === 0) return 0;
+          var map = {};
+          for (var i = 0; i < entries.length; i++) {
+            map[entries[i].date] = true;
+          }
+          var days = Object.keys(map).sort(); // tăng dần
+
+          var streak = 1;
+          var oneDayMs = 24 * 60 * 60 * 1000;
+          for (var j = days.length - 1; j > 0; j--) {
+            var d1 = new Date(days[j]);
+            var d0 = new Date(days[j - 1]);
+            var diff = (d1 - d0) / oneDayMs;
+            if (diff === 1) {
+              streak++;
+            } else {
+              break;
+            }
+          }
+          return streak;
+        }
+
+        function renderJournal() {
+          var textarea = document.getElementById("journal-text");
+          var statusEl = document.getElementById("journal-status");
+          var streakEl = document.getElementById("journal-streak");
+          var listEl   = document.getElementById("journal-list");
+          if (!textarea || !statusEl || !streakEl || !listEl) return;
+
+          var entries = loadEntries();
+          var today   = getTodayStr();
+
+          var todayText = "";
+          for (var i = 0; i < entries.length; i++) {
+            if (entries[i].date === today) {
+              todayText = entries[i].text;
+              break;
+            }
+          }
+          textarea.value = todayText;
+
+          streakEl.textContent = calcStreak(entries);
+
+          listEl.innerHTML = "";
+          entries.sort(function (a, b) {
+            return a.date < b.date ? 1 : -1;
+          });
+          for (var k = 0; k < Math.min(entries.length, 7); k++) {
+            var e = entries[k];
+            var li = document.createElement("li");
+            li.style.marginBottom = "4px";
+            var preview = e.text.length > 60 ? e.text.slice(0, 60) + "..." : e.text;
+            li.textContent = e.date + ": " + preview;
+            listEl.appendChild(li);
+          }
+
+          statusEl.textContent = "";
+        }
+
+        function setupJournal() {
+          var textarea = document.getElementById("journal-text");
+          var statusEl = document.getElementById("journal-status");
+          var btn      = document.getElementById("save-journal-btn");
+          if (!textarea || !statusEl || !btn) return;
+
+          btn.addEventListener("click", function () {
+            var text = textarea.value.trim();
+            if (!text) {
+              statusEl.textContent = "Nhật kí hôm nay đang trống, bạn hãy viết vài dòng nhé 🌿";
+              statusEl.style.color = "#b91c1c";
+              return;
+            }
+            var today   = getTodayStr();
+            var entries = loadEntries();
+            var found   = false;
+
+            for (var i = 0; i < entries.length; i++) {
+              if (entries[i].date === today) {
+                entries[i].text = text;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              entries.push({ date: today, text: text });
+            }
+            saveEntries(entries);
+            statusEl.textContent = "Đã lưu nhật kí hôm nay 💚";
+            statusEl.style.color = "#166534";
+            renderJournal();
+          });
+
+          renderJournal();
+        }
+  
+        setupJournal();
+      } catch (err) {
+        console.log("Journal error:", err);
+      }
+    });
+
+  </script>
+ <!-- 🎵 Bong bóng chat âm nhạc (xuất hiện ở tất cả các phần) -->
+<div id="music-bubble" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #86efac, #4ade80);
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.4);
+  width: 68px;
+  height: 68px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #064e3b;
+  z-index: 999;
+  transition: all 0.3s ease;
+">
+  🎵
+</div>
+
+<!-- 🔊 Liên kết đến file nhạc bạn đã đặt cùng thư mục -->
+<audio id="mindyMusic" src="music.mp3" loop></audio>
+
+<script>
+  // 🌿 Bong bóng bật/tắt nhạc
+  const bubble = document.getElementById('music-bubble');
+  const music = document.getElementById('mindyMusic');
+  let playing = false;
+
+  // Hiệu ứng hover
+  bubble.addEventListener('mouseenter', () => {
+    bubble.style.transform = 'scale(1.1)';
+  });
+  bubble.addEventListener('mouseleave', () => {
+    bubble.style.transform = 'scale(1)';
+  });
+
+  // Bật / tắt nhạc khi bấm
+  bubble.addEventListener('click', function() {
+    if (!playing) {
+      music.play();
+      playing = true;
+      bubble.textContent = '🔇';
+      bubble.style.background = 'linear-gradient(135deg, #bbf7d0, #86efac)';
+    } else {
+      music.pause();
+      playing = false;
+      bubble.textContent = '🎵';
+      bubble.style.background = 'linear-gradient(135deg, #86efac, #4ade80)';
+    }
+  });
+</script>
+</body>
+</html>.  
